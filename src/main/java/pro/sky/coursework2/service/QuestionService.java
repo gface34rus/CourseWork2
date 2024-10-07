@@ -2,14 +2,19 @@ package pro.sky.coursework2.service;
 
 import pro.sky.coursework2.model.Question;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface QuestionService {
-    void addQuestion(Question question);
+    Question addQuestion(String question, String answer);
 
-    void removeQuestion(Question question);
+    Question addQuestion(Question question);
 
-    List<Question> getAllQuestions();
+    Question removeQuestion(String question, String answer);
+
+    Question removeQuestion(Question question);
+
+    Collection<Question> getAllQuestions();
 
     Question getRandomQuestion();
 }

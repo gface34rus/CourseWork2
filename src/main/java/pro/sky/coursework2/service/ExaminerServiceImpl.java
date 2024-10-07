@@ -1,32 +1,34 @@
 package pro.sky.coursework2.service;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2.exception.MyBadRequestException;
+import pro.sky.coursework2.exception.QuestionAmountMismatchException;
 import pro.sky.coursework2.model.Question;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
-public class ExaminerServiceImpl implements ExaminerService {
-    private final JavaQuestionService javaQuestionService;
+public class  ExaminerServiceImpl implements ExaminerService {
+    private final QuestionService questionService;
 
-    public ExaminerServiceImpl(JavaQuestionService javaQuestionService) {
-        this.javaQuestionService = javaQuestionService;
+    public ExaminerServiceImpl(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @Override
-    public List<Question> getQuestions(int amount)  {
-        Set<Question> uniqueQuestions = new HashSet<>();
-
-        while (uniqueQuestions.size() < amount) {
-            uniqueQuestions.add(javaQuestionService.getRandomQuestion());
-            if (uniqueQuestions.size() >= javaQuestionService.getAllQuestions().size()) {
-                throw new MyBadRequestException("Недостаточно уникальных вопросов");
-            }
+    public Collection<Question> getQuestions(int amount) {
+        Collection<Question> allQuestions = questionService.getAllQuestions();
+        if (amount < 0 || amount > allQuestions.size()) {
+            throw new QuestionAmountMismatchException("Недостаточно уникальных вопросов");
         }
-        return List.copyOf(uniqueQuestions);
+        if (amount == allQuestions.size()) {
+            return allQuestions;
+        }
+        Set<Question> resultSet = new HashSet<>();
+        while (resultSet.size() < amount) {
+            resultSet.add(questionService.getRandomQuestion());
+        }
+
+        return resultSet;
     }
 }

@@ -3,30 +3,31 @@ package pro.sky.coursework2.controller;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.coursework2.model.Question;
 import pro.sky.coursework2.service.JavaQuestionService;
+import pro.sky.coursework2.service.QuestionService;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/exam/java")
 public class JavaQuestionController {
-    private final JavaQuestionService javaQuestionService;
+    private final QuestionService questionService;
 
-    public JavaQuestionController(JavaQuestionService javaQuestionService) {
-        this.javaQuestionService = javaQuestionService;
+    public JavaQuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
-    @PostMapping("/add")
-    public void addQuestion(@RequestParam String question, @RequestParam String answer) {
-        javaQuestionService.addQuestion(new Question(question, answer));
+    @GetMapping("/add")
+    public Question addQuestion(@RequestParam String question, @RequestParam String answer) {
+        return questionService.addQuestion(question, answer);
     }
 
-    @DeleteMapping("/remove")
-    public void removeQuestion(@RequestParam String question, @RequestParam String answer) {
-        javaQuestionService.removeQuestion(new Question(question, answer));
+    @GetMapping("/remove")
+    public Question removeQuestion(@RequestParam String question, @RequestParam String answer) {
+        return questionService.removeQuestion(new Question(question, answer));
     }
 
-    @GetMapping("/get-all-questions")
-    public List<Question> getAllQuestions() {
-        return javaQuestionService.getAllQuestions();
+    @GetMapping
+    public Collection<Question> getAllQuestions() {
+        return questionService.getAllQuestions();
     }
 }

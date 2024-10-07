@@ -6,6 +6,7 @@ import pro.sky.coursework2.model.Question;
 import pro.sky.coursework2.service.ExaminerService;
 
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class ExamController {
     }
 
     @GetMapping("/get/{amount}")
-    public List<Question> getQuestions(@PathVariable int amount) throws BadRequestException {
+    public Collection<Question> getQuestions(@PathVariable int amount) throws BadRequestException {
         return examinerService.getQuestions(amount);
     }
 }

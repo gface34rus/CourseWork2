@@ -1,30 +1,113 @@
 package pro.sky.coursework2.service;
 
 import org.junit.jupiter.api.Test;
+import pro.sky.coursework2.exception.MyBadRequestException;
 import pro.sky.coursework2.model.Question;
 
+import java.util.Collection;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
+import static pro.sky.coursework2.service.TestData.*;
 
 public class JavaQuestionServiceTest {
-    private final JavaQuestionService service = new JavaQuestionService();
+    private final JavaQuestionService javaQuestionService = new JavaQuestionService();
 
     @Test
-    void testAddAndGetAllQuestions() {
-        service.addQuestion(new Question("Вопрос 1", "Ответ 1"));
-        assertEquals(1, service.getAllQuestions().size());
+    void shouldAddQuestion_WhenCorrectQuestion_ThenAdd() {
+
+        //test
+        Question actual = javaQuestionService.addQuestion(TEST_QUESTION_1);
+
+        //check
+        assertThat(actual).isEqualTo(TEST_QUESTION_1);
+
     }
 
     @Test
-    void testRemoveQuestion() {
-        Question question = new Question("Вопрос 1", "Ответ 1");
-        service.addQuestion(question);
-        service.removeQuestion(question);
-        assertTrue(service.getAllQuestions().isEmpty());
+    void shouldAddQuestion_WhenQuestionAlreadyAdded_ThenThrowException() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1);
+        //test & check
+        assertThatExceptionOfType(MyBadRequestException.class)
+                .isThrownBy(() -> javaQuestionService.addQuestion(TEST_QUESTION_1));
     }
 
     @Test
-    void testGetRandomQuestion() {
-        service.addQuestion(new Question("Вопрос 1", "Ответ 1"));
-        assertNotNull(service.getRandomQuestion());
+    void shouldAddQuestion_WhenCorrectQuestionAndAnswer_ThenAdd() {
+        //test
+        Question actual = javaQuestionService.addQuestion(TEST_QUESTION_1.getQuestion(), TEST_QUESTION_1.getAnswer());
+        assertThat(actual).isEqualTo(TEST_QUESTION_1);
+    }
+
+    @Test
+    void shouldAddQuestion_WhenQuestionAndAnswerAlreadyAdded_ThenThrowException() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1.getQuestion(), TEST_QUESTION_1.getAnswer());
+        //test & check
+        assertThatExceptionOfType(MyBadRequestException.class)
+                .isThrownBy(() -> javaQuestionService.addQuestion(TEST_QUESTION_1));
+    }
+
+    @Test
+    void shouldRemoveQuestion_WhenCorrectQuestion_ThenRemove() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1);
+
+        // test
+        Question actual = javaQuestionService.removeQuestion(TEST_QUESTION_1);
+
+        //check
+        Collection<Question> result = javaQuestionService.getAllQuestions();
+        assertThat(result).isEmpty();
+        assertThat(actual).isEqualTo(TEST_QUESTION_1);
+
+    }
+
+    @Test
+    void shouldRemoveQuestion_WhenCorrectQuestionAndAnswer_ThenRemove() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1.getQuestion(), TEST_QUESTION_1.getAnswer());
+
+        // test
+        Question actual = javaQuestionService.removeQuestion(TEST_QUESTION_1);
+
+        //check
+        Collection<Question> result = javaQuestionService.getAllQuestions();
+        assertThat(result).isEmpty();
+        assertThat(actual).isEqualTo(TEST_QUESTION_1);
+
+    }
+
+    @Test
+    void shouldRemoveQuestion_WhenQuestionNotExist_ThenThrowException() {
+        // test
+        assertThatExceptionOfType(MyBadRequestException.class)
+                .isThrownBy(() -> javaQuestionService.removeQuestion(TEST_QUESTION_1));
+
+    }
+
+    @Test
+    void shouldReturnAllQuestions() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1);
+        javaQuestionService.addQuestion(TEST_QUESTION_2);
+        javaQuestionService.addQuestion(TEST_QUESTION_3);
+
+        //test
+        Collection<Question> actual = javaQuestionService.getAllQuestions();
+
+        //check
+        assertThat(actual).hasSize(3);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(getAll());
+    }
+
+    @Test
+    void shouldReturnRandomQuestion() {
+        javaQuestionService.addQuestion(TEST_QUESTION_1);
+        javaQuestionService.addQuestion(TEST_QUESTION_2);
+        javaQuestionService.addQuestion(TEST_QUESTION_3);
+
+        //test
+        Question actual = javaQuestionService.getRandomQuestion();
+
+        //check
+        assertThat(getAll()).contains(actual);
     }
 }
