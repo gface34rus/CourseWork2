@@ -1,4 +1,4 @@
-package pro.sky.coursework21;
+package pro.sky.coursework2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
