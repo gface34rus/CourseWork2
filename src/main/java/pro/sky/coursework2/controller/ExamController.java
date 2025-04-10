@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/exam")
 public class ExamController {
+
     private final ExaminerService examinerService;
 
     public ExamController(ExaminerService examinerService) {

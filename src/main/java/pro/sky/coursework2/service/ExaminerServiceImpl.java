@@ -1,14 +1,15 @@
 package pro.sky.coursework2.service;
 
 import org.springframework.stereotype.Service;
-import pro.sky.coursework2.exception.MyBadRequestException;
 import pro.sky.coursework2.exception.QuestionAmountMismatchException;
 import pro.sky.coursework2.model.Question;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
-public class  ExaminerServiceImpl implements ExaminerService {
+public class ExaminerServiceImpl implements ExaminerService {
     private final QuestionService questionService;
 
     public ExaminerServiceImpl(QuestionService questionService) {

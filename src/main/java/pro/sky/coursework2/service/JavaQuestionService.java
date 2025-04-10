@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service;
 import pro.sky.coursework2.exception.MyBadRequestException;
 import pro.sky.coursework2.model.Question;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import static java.util.Collections.unmodifiableCollection;
 
@@ -52,10 +55,12 @@ public class JavaQuestionService implements QuestionService {
         return question;
     }
 
+
     @Override
     public Collection<Question> getAllQuestions() {
         return unmodifiableCollection(questions);
     }
+
 
     @Override
     public Question getRandomQuestion() {
